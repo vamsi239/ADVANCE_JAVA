@@ -1,0 +1,10 @@
+package com.lpu.boot1.controller;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class StudentController {
+	
+	
+
+}

@@ -1,0 +1,48 @@
+package com.lpu.employeeapp.Service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import com.lpu.employeeapp.Entity.Company;
+import com.lpu.employeeapp.Entity.Employee;
+import com.lpu.employeeapp.Repository.CompanRepo;
+
+@Service
+public class CompanyService {
+	
+	@Autowired
+	private CompanyRepository cmprepo;
+	
+	
+	//save
+	public Company saveCmp(Company company) {
+		return cmprepo.save(company);
+		
+	}
+	
+	//save cmp with mapping of employee
+	public Company saveCmpAndMapWithEmp(Company company) {
+		company.getEmployeelist().forEach((emp) ->emp.setCompany(company));
+		return cmprepo.save(company);
+	}
+	
+	
+	//svae emp to existing company
+	public Company saveEmptoExistingCmp(int id,List<Employee> newEmplist) {
+		Company company = cmprepo.findById(id).orElse(null);
+		company.getEmployeelist().addAll(newEmplist);
+		return saveCmpAndMapWithEmp(company);
+	}
+	
+	
+	//find compnay by id
+	public Company findCmpByid(@PathVariable int id) {
+		return cmprepo.findById(id).orElseThrow();
+		
+	}
+	
+
+}

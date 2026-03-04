@@ -1,0 +1,55 @@
+package E_commerce;
+
+import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class m1kolkata {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		
+		int n = sc.nextInt();
+		sc.nextLine();
+		
+		List<List<String>> logs = new ArrayList<>();
+		
+		for(int i=0;i<n;i++) {
+			String s = sc.nextLine();
+			
+			String[] parts = s.split(" ");
+			
+			
+			logs.add(Arrays.asList(parts[0],parts[1],parts[2],parts[3]));
+		}
+		
+		logs.stream()
+		.filter(log -> log.get(2).equals("Error")||log.get(2).equals("Critical"))
+		.sorted(Comparator.comparing(log ->compareTo(log.get(0),log.get(1))))
+		.forEach(System.out::println);
+	}
+		
+		public static long compareTo(String date,String time) {
+			String[] d = date.split("-");
+			Long day = Long.parseLong(d[0]);
+			Long month = Long.parseLong(d[1]);
+			Long year = Long.parseLong(d[2]);
+			String[] t =time.split(":");
+			Long hour = Long.parseLong(t[0]);
+			Long min =Long.parseLong(t[1]);
+			
+			return year*100000000 
+					+month*1000000
+					+day*10000
+					+hour*100
+					+min;
+			
+		}
+		
+		
+		
+		
+	
+		
+	}
+		 

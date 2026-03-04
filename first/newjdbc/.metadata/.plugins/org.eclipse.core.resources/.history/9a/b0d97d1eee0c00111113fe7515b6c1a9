@@ -1,0 +1,232 @@
+package m1practice;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+// ---------------------- ABSTRACT CLASS ----------------------
+abstract class Person {
+    protected int id;
+    protected String name;
+
+    public Person(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public abstract void displayDetails();
+}
+
+// ---------------------- PATIENT CLASS ----------------------
+class Patient extends Person {
+    private int age;
+    private String disease;
+
+    public Patient(int id, String name, int age, String disease) {
+        super(id, name);
+        this.age = age;
+        this.disease = disease;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void displayDetails() {
+        System.out.println("Patient ID: " + id + ", Name: " + name +
+                ", Age: " + age + ", Disease: " + disease);
+    }
+}
+
+// ---------------------- DOCTOR CLASS ----------------------
+class Doctor extends Person {
+    private String specialization;
+    private double consultationFee;
+
+    public Doctor(int id, String name, String specialization, double consultationFee) {
+        super(id, name);
+        this.specialization = specialization;
+        this.consultationFee = consultationFee;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public double getConsultationFee() {
+        return consultationFee;
+    }
+
+    public void displayDetails() {
+        System.out.println("Doctor ID: " + id + ", Name: " + name +
+                ", Specialization: " + specialization +
+                ", Fee: " + consultationFee);
+    }
+}
+
+// ---------------------- APPOINTMENT CLASS ----------------------
+class Appointment {
+    private int appointmentId;
+    private Patient patient;
+    private Doctor doctor;
+    private String appointmentDate;
+    private double billAmount;
+
+    public Appointment(int appointmentId, Patient patient, Doctor doctor, String appointmentDate) {
+        this.appointmentId = appointmentId;
+        this.patient = patient;
+        this.doctor = doctor;
+        this.appointmentDate = appointmentDate;
+        this.billAmount = calculateBill();
+    }
+
+    private double calculateBill() {
+        return doctor.getConsultationFee();
+    }
+
+    public double getBillAmount() {
+        return billAmount;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void displayAppointment() {
+        System.out.println("Appointment ID: " + appointmentId +
+                ", Patient: " + patient.getName() +
+                ", Doctor Fee: " + doctor.getConsultationFee() +
+                ", Date: " + appointmentDate +
+                ", Bill: " + billAmount);
+    }
+}
+
+// ---------------------- CUSTOM EXCEPTIONS ----------------------
+class PatientNotFoundException extends Exception {
+    public PatientNotFoundException(String message) {
+        super(message);
+    }
+}
+
+class DoctorNotFoundException extends Exception {
+    public DoctorNotFoundException(String message) {
+        super(message);
+    }
+}
+
+class InvalidAppointmentException extends Exception {
+    public InvalidAppointmentException(String message) {
+        super(message);
+    }
+}
+
+// ---------------------- HOSPITAL MANAGEMENT CLASS ----------------------
+class HospitalManagement {
+
+    private ArrayList<Patient> patients = new ArrayList<>();
+    private ArrayList<Doctor> doctors = new ArrayList<>();
+    private ArrayList<Appointment> appointments = new ArrayList<>();
+
+    private int appointmentCounter = 1;
+
+    // Register Patient
+    public void registerPatient(Patient patient) {
+        patients.add(patient);
+    }
+
+    // Add Doctor
+    public void addDoctor(Doctor doctor) {
+        doctors.add(doctor);
+    }
+
+    // Book Appointment
+    public void bookAppointment(int patientId, int doctorId, String date)
+            throws PatientNotFoundException, DoctorNotFoundException, InvalidAppointmentException {
+
+        Patient patient = patients.stream()
+                .filter(p -> p.getId() == patientId)
+                .findFirst()
+                .orElseThrow(() -> new PatientNotFoundException("Patient not found with ID: " + patientId));
+
+        Doctor doctor = doctors.stream()
+                .filter(d -> d.getId() == doctorId)
+                .findFirst()
+                .orElseThrow(() -> new DoctorNotFoundException("Doctor not found with ID: " + doctorId));
+
+        if (date == null || date.isEmpty()) {
+            throw new InvalidAppointmentException("Invalid appointment date.");
+        }
+
+        Appointment appointment = new Appointment(appointmentCounter++, patient, doctor, date);
+        appointments.add(appointment);
+
+        System.out.println("Appointment booked successfully!");
+    }
+
+    // Display Appointments
+    public void displayAppointments() {
+        appointments.forEach(Appointment::displayAppointment);
+    }
+
+    // Calculate Total Revenue (Using Stream API)
+    public double calculateTotalRevenue() {
+        return appointments.stream()
+                .mapToDouble(Appointment::getBillAmount)
+                .sum();
+    }
+
+    // Bonus: Revenue Doctor-wise
+    public void calculateRevenueDoctorWise() {
+        Map<Doctor, Double> revenueMap =
+                appointments.stream()
+                        .collect(Collectors.groupingBy(
+                                Appointment::getDoctor,
+                                Collectors.summingDouble(Appointment::getBillAmount)
+                        ));
+
+        revenueMap.forEach((doctor, revenue) ->
+                System.out.println("Doctor Revenue: " + revenue));
+    }
+}
+
+// ---------------------- MAIN CLASS ----------------------
+public class HospitalManagementSystem {
+
+    public static void main(String[] args) {
+
+        HospitalManagement hospital = new HospitalManagement();
+
+        // Add Patients
+        hospital.registerPatient(new Patient(1, "Rahul", 25, "Fever"));
+        hospital.registerPatient(new Patient(2, "Anjali", 30, "Diabetes"));
+        hospital.registerPatient(new Patient(3, "Kiran", 45, "Asthma"));
+
+        // Add Doctors
+        hospital.addDoctor(new Doctor(101, "Dr. Sharma", "General", 500));
+        hospital.addDoctor(new Doctor(102, "Dr. Mehta", "Cardiologist", 800));
+
+        try {
+            // Book Appointments
+            hospital.bookAppointment(1, 101, "18-02-2026");
+            hospital.bookAppointment(2, 102, "19-02-2026");
+            hospital.bookAppointment(3, 101, "20-02-2026");
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        // Display Appointments
+        System.out.println("\nAll Appointments:");
+        hospital.displayAppointments();
+
+        // Calculate Revenue
+        System.out.println("\nTotal Hospital Revenue: " + hospital.calculateTotalRevenue());
+
+        // Bonus
+        System.out.println("\nDoctor-wise Revenue:");
+        hospital.calculateRevenueDoctorWise();
+    }
+}

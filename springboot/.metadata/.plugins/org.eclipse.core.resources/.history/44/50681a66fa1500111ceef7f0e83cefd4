@@ -1,0 +1,5 @@
+package com.lpu.employeeapp.Service;
+
+public class EmployeeService {
+
+}

@@ -1,0 +1,5 @@
+package com.lpu.spring.Repository;
+
+public class EmployeeRepository {
+
+}

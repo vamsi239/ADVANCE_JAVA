@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="java.lang.invoke.MethodHandles.Lookup.ClassOption"/>
+    <fullyQualifiedTypeName name="jakarta.persistence.Persistence"/>
+    <fullyQualifiedTypeName name="jakarta.persistence.EntityManager"/>
+    <fullyQualifiedTypeName name="jakarta.persistence.FetchType"/>
+    <fullyQualifiedTypeName name="jakarta.persistence.CascadeType"/>
+    <fullyQualifiedTypeName name="jakarta.persistence.GenerationType"/>
+    <fullyQualifiedTypeName name="java.time.LocalDateTime"/>
+    <fullyQualifiedTypeName name="jakarta.persistence.EntityManagerFactory"/>
+    <fullyQualifiedTypeName name="jakarta.persistence.EntityTransaction"/>
+    <fullyQualifiedTypeName name="jakarta.persistence.GeneratedValue"/>
+    <fullyQualifiedTypeName name="java.lang.IllegalArgumentException"/>
+    <fullyQualifiedTypeName name="java.util.stream.Collectors"/>
+    <fullyQualifiedTypeName name="java.util.Comparator"/>
+    <fullyQualifiedTypeName name="java.util.Arrays"/>
+</qualifiedTypeNameHistroy>

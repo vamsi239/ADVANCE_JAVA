@@ -1,0 +1,5 @@
+package com.lpu.employeeapp.config;
+
+public class CacheConfig {
+
+}

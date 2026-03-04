@@ -1,0 +1,55 @@
+package M1Question19feb;
+
+import java.util.*;
+
+class ExamManager {
+
+    private Map<String, LinkedHashMap<String, Integer>> map = new LinkedHashMap<>();
+
+
+    public int addRecord(String id, String sub, int marks) {
+    	if(!map.containsKey(id)) {
+    		map.put(id,new LinkedHashMap());	
+    	}
+    	map.get(id).put(sub, marks);
+    	
+    	return 0;
+
+       
+    }
+
+    public int removeRecord(String id, String sub) {
+    	map.get(id).remove(sub);
+    	
+    	return 0;
+
+    
+    }
+
+    public String getTopScorer(String sub) {
+    	
+  
+    }
+
+    public String getResult() {
+
+   
+    }
+
+    public int processCommands(Scanner sc, int N) {
+
+        
+    }
+
+    public String getOutput() {
+        return out.toString().trim();
+    }
+}
+
+public class examSys {
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+       
+    }
+}

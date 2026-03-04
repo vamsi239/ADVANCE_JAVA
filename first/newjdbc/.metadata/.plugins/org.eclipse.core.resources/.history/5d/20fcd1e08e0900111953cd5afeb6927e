@@ -1,0 +1,38 @@
+package com.lpu.service;
+
+import com.lpu.dao.Studentdao;
+import com.lpu.entity.Student;
+
+public class StudentService {
+	private Studentdao dao =  new Studentdao();
+	
+	public Student registerStudent(String name,int age,double marks) {
+		if(age<18 || age>100) {
+			throw new IllegalArgumentException("Student not eligible");
+		}
+		if(marks<0 || marks>100) {
+			throw new IllegalArgumentException("Invalid marks");
+		}
+		Student s = new Student(name,age,marks);
+		return dao.saveStudent(s);
+		
+	}
+	public Student getStudent(int id) {
+		Student s = dao.findStudentByid(id);
+		if(s == null) {
+			throw new IllegalArgumentException("Student not found");
+		}
+		return s;
+	}
+	public void UpdateMarksByid(int id,double marks) {
+		if(marks<0 || marks>100) {
+			throw new IllegalArgumentException("Invalid marks");
+		}
+		dao.updateStudentMarks(id, marks);
+		
+	}
+	public void deleteStudent(int id) {
+		dao.deleteStudentById(id);
+	}
+
+}

@@ -1,0 +1,46 @@
+package com.lpu.vehicle;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+@Component
+public class Person {
+	@Value("101")
+	private int id;
+	@Value("Vignan")
+	private String name;
+	//@Autowired
+	private Vehicle v;
+	
+	public Person(Vehicle v) {
+		this.v=v;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Vehicle getV() {
+		return v;
+	}
+
+	public void setV(Vehicle v) {
+		this.v = v;
+	}
+	
+	
+
+}

@@ -1,0 +1,38 @@
+package com.lpu.dao;
+
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
+import com.lpu.Entity.Employee;
+
+import jakarta.persistence.*;
+
+@Repository
+public class Employeedao {
+
+    @PersistenceContext
+    private EntityManager em;
+
+    public void save(Employee e) {
+        em.persist(e);
+    }
+
+    public void update(Employee e) {
+        em.merge(e);
+    }
+
+    public void delete(int id) {
+        Employee e = em.find(Employee.class, id);
+        em.remove(e);
+    }
+
+    public Employee getById(int id) {
+        return em.find(Employee.class, id);
+    }
+
+    public List<Employee> getAll() {
+        return em.createQuery("from Employee", Employee.class)
+                 .getResultList();
+    }
+}

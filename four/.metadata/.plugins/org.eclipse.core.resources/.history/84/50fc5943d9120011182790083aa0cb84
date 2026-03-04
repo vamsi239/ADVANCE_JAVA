@@ -1,0 +1,6 @@
+package com.lpu;
+
+@Entity
+public class Employee {
+
+}

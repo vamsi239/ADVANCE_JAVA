@@ -1,0 +1,59 @@
+package com.lpu.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import com.lpu.Entity.Employee;
+import com.lpu.dao.Employeedao;
+
+@Controller
+@RequestMapping("/employee")
+public class EmployeeController {
+
+    @Autowired
+    private Employeedao dao;
+
+    @RequestMapping("/home")
+    public String home(Model model) {
+        model.addAttribute("list", dao.getAll());
+        return "displayall";
+    }
+
+    // -------- SAVE --------
+
+    @RequestMapping("/savePage")
+    public String savePage(Model model) {
+        model.addAttribute("emp", new Employee());
+        return "save";
+    }
+
+    @RequestMapping(value="/save", method=RequestMethod.POST)
+    public String save(@ModelAttribute("emp") Employee e, Model model) {
+        dao.save(e);
+        model.addAttribute("list", dao.getAll());
+        return "displayall";
+    }
+
+    // -------- UPDATE --------
+
+    @RequestMapping("/updatePage")
+    public String updatePage() {
+        return "update";
+    }
+
+    @RequestMapping("/edit")
+    public String edit(@RequestParam("id") int id, Model model) {
+        Employee emp = dao.getById(id);
+        model.addAttribute("emp", emp);
+        return "update";
+    }
+
+    @RequestMapping(value="/update", method=RequestMethod.POST)
+    public String update(@ModelAttribute("emp") Employee e, Model model) {
+        dao.update(e);
+        model.addAttribute("list", dao.getAll());
+        return "displayall";
+    }
+}

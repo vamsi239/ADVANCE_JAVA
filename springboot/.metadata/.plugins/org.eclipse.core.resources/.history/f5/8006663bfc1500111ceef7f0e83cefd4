@@ -1,0 +1,32 @@
+package com.lpu.employeeapp.Service;
+
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.lpu.employeeapp.Entity.Company;
+import com.lpu.employeeapp.Repository.CompanRepo;
+
+@Service
+public class CompanyService {
+	
+	@Autowired
+	private CompanRepo cmprepo;
+	
+	
+	//save
+	public Company saveCmp(Company company) {
+		return cmprepo.save(company);
+		
+	}
+	
+	//save cmp with mapping of employee
+	public Company saveCmpAndMapWithEmp(Company company) {
+		company.getEmployeelist().forEach((emp) ->emp.setCompany(company));
+		return cmprepo.save(company);
+	}
+	
+	
+
+}

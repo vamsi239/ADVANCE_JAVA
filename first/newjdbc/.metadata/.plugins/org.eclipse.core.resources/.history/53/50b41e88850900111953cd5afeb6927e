@@ -1,0 +1,11 @@
+package com.lpu.test;
+
+import org.junit.jupiter.api.Test;
+
+public class StudentServicetest {
+
+	@Test
+	public void demo1() {
+		s
+	}
+}

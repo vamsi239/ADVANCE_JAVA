@@ -1,0 +1,5 @@
+package com.lpu.vehicle;
+
+public interface Vehicle {
+
+}

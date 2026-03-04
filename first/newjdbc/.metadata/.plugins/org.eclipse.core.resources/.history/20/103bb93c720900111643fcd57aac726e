@@ -1,0 +1,13 @@
+package com.lpu.controller;
+
+import com.lpu.service.StudentService;
+
+public class StudentController {
+	private static StudentService stuserv = new StudentService();
+	
+	public static void main(String[] args) {
+		stuserv.registerStudent("rty", 98, 35);
+		
+	}
+
+}

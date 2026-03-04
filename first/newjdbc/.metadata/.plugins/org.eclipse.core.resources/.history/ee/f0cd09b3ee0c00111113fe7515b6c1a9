@@ -1,0 +1,272 @@
+package m1practice;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+// ========================= PERSON =========================
+abstract class Person {
+
+    protected int id;
+    protected String name;
+
+    public Person(int id, String name) {
+        if (id <= 0)
+            throw new IllegalArgumentException("Invalid ID");
+
+        // TODO: Validate name (alphabets only, min 3 chars)
+        if(!name.matches("^[a-bA-b]{3,}$")) throw new IllegalArgumentException("name is invalid");
+        
+
+        this.id = id;
+        this.name = name;
+    }
+
+    public int getId() { return id; }
+
+    public String getName() { return name; }
+}
+
+// ========================= PATIENT =========================
+class Patient extends Person {
+
+    private List<Appointment> appointments = new ArrayList<>();
+
+    public Patient(int id, String name) {
+        super(id, name);
+    }
+
+    public void addAppointment(Appointment appointment) {
+        // TODO: add to list
+    	appointments.add(appointment);
+    }
+
+    public List<Appointment> getAppointments() {
+        return appointments;
+    }
+}
+
+// ========================= DOCTOR =========================
+class Doctor extends Person {
+
+    private String specialization;
+    private double consultationFee;
+    private List<Appointment> appointments = new ArrayList<>();
+
+    public Doctor(int id, String name,
+                  String specialization,
+                  double consultationFee) {
+
+        super(id, name);
+
+        // TODO:
+        // Validate specialization not empty
+        // Validate consultationFee > 0
+        if(specialization==null||specialization=="") throw new IllegalArgumentException("in validspe");
+        if(consultationFee <0) throw new IllegalArgumentException("invalid fee");
+        this.specialization = specialization;
+        this.consultationFee = consultationFee;
+    }
+
+    public void bookAppointment(Appointment appointment)
+            throws DoctorFullyBookedException {
+
+        // TODO:
+        // Max 5 appointments only
+        // Add appointment to list
+    	if(appointments.size()>5) throw new DoctorFullyBookedException("Doctor is filled");
+    	
+    	appointments.add(appointment);
+    }
+
+    public double getConsultationFee() {
+        return consultationFee;
+    }
+
+    public List<Appointment> getAppointments() {
+        return appointments;
+    }
+}
+
+// ========================= APPOINTMENT =========================
+class Appointment {
+
+    private int appointmentId;
+    private Patient patient;
+    private Doctor doctor;
+    private String status;
+    private double billAmount;
+
+    public Appointment(int appointmentId,
+                       Patient patient,
+                       Doctor doctor) {
+
+        this.appointmentId = appointmentId;
+        this.patient = patient;
+        this.doctor = doctor;
+        this.status = "BOOKED";
+    }
+
+    public void completeAppointment()
+            throws AppointmentAlreadyCompletedException {
+
+        // TODO:
+        // If already completed throw exception
+    	if(status.equals("COMPLETED")) throw new AppointmentAlreadyCompletedException("AppointmentAlreadyCompleted");
+        // Change status
+    	status = "COMPLETED";
+    	billAmount = doctor.getConsultationFee();
+        // Generate bill using doctor fee
+    }
+
+    public String getStatus() { return status; }
+
+    public double getBillAmount() { return billAmount; }
+
+    public Doctor getDoctor() { return doctor; }
+
+    public Patient getPatient() { return patient; }
+}
+
+// ========================= HOSPITAL SERVICE =========================
+class HospitalService {
+
+    private List<Patient> patients = new ArrayList<>();
+    private List<Doctor> doctors = new ArrayList<>();
+    private List<Appointment> appointments = new ArrayList<>();
+
+    public void registerPatient(Patient patient) {
+        patients.add(patient);
+    }
+
+    public void addDoctor(Doctor doctor) {
+        doctors.add(doctor);
+    }
+
+    public Patient findPatient(int id)
+            throws PatientNotFoundException {
+
+        // TODO: Use Stream API
+    	return patients.stream()
+    	.filter(o->o.getId()==id)
+    	.findFirst()
+    	.orElseThrow(()-> new PatientNotFoundException("PatientNotFound"));
+       
+    }
+
+    public Doctor findDoctor(int id)
+            throws DoctorNotFoundException {
+    	return doctors.stream()
+    			.filter(o->o.getId()==id)
+    			.findFirst()
+    			.orElseThrow(()->new DoctorNotFoundException("DoctorNotFound"));
+        // TODO: Use Stream API
+       
+    }
+
+    public void bookAppointment(int appointmentId,
+                                int patientId,
+                                int doctorId)
+            throws Exception {
+
+        // TODO:
+        // Find patient
+    	Patient p = findPatient(patientId);
+    	Doctor d = findDoctor(doctorId);
+    	
+    	Appointment a = new Appointment(appointmentId,p,d);
+    	p.addAppointment(a);
+    	d.bookAppointment(a);
+    	appointments.add(a);
+    	
+        // Find doctor
+        // Create appointment
+        // Add to patient and doctor
+        // Store in appointments list
+    }
+
+    public double calculateTotalRevenue() {
+
+        // TODO:
+        // Use Stream API
+        // Sum billAmount of COMPLETED appointments
+    	return appointments.stream()
+    	.mapToDouble(Appointment::getBillAmount)
+    	.sum();
+       
+    }
+}
+
+// ========================= CUSTOM EXCEPTIONS =========================
+class PatientNotFoundException extends Exception {
+    public PatientNotFoundException(String message) {
+        super(message);
+    }
+}
+
+class DoctorNotFoundException extends Exception {
+    public DoctorNotFoundException(String message) {
+        super(message);
+    }
+}
+
+class DoctorFullyBookedException extends Exception {
+    public DoctorFullyBookedException(String message) {
+        super(message);
+    }
+}
+
+class AppointmentAlreadyCompletedException extends Exception {
+    public AppointmentAlreadyCompletedException(String message) {
+        super(message);
+    }
+}
+
+// ========================= MAIN CLASS =========================
+public class HospitalManagementSystem {
+
+    public static void main(String[] args) {
+
+        HospitalService service = new HospitalService();
+
+        // ---------------- Register Patients ----------------
+        Patient p1 = new Patient(1, "Rahul");
+        Patient p2 = new Patient(2, "Anjali");
+        Patient p3 = new Patient(3, "Kiran");
+
+        service.registerPatient(p1);
+        service.registerPatient(p2);
+        service.registerPatient(p3);
+
+        // ---------------- Add Doctors ----------------
+        Doctor d1 = new Doctor(101, "DrSharma", "General", 500);
+        Doctor d2 = new Doctor(102, "DrMehta", "Cardiology", 800);
+
+        service.addDoctor(d1);
+        service.addDoctor(d2);
+
+        // ---------------- Book Appointments ----------------
+        try {
+            service.bookAppointment(1001, 1, 101);
+            service.bookAppointment(1002, 2, 102);
+            service.bookAppointment(1003, 3, 101);
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        // ---------------- Complete Appointment Test ----------------
+        try {
+            // This will work properly after you implement logic
+            // Example:
+            // Appointment a = service.getAppointments().get(0);
+            // a.completeAppointment();
+        } catch (Exception e) {
+            System.out.println("Completion Error: " + e.getMessage());
+        }
+
+        // ---------------- Revenue Calculation ----------------
+        double totalRevenue = service.calculateTotalRevenue();
+        System.out.println("Total Revenue: " + totalRevenue);
+
+        System.out.println("System Testing Completed.");
+    }
+}

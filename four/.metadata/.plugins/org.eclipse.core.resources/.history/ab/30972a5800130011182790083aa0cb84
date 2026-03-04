@@ -1,0 +1,82 @@
+package com.lpu.controller;
+
+import com.lpu.dao.Employeedao;
+import com.lpu.Entity.Employee;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+@Controller
+@RequestMapping("/employee")
+public class EmployeeController {
+
+    @Autowired
+    private Employeedao dao;
+
+    // Home Page
+    @RequestMapping("/home")
+    public String home(Model model) {
+        model.addAttribute("list", dao.getAll());
+        return "displayall";
+    }
+
+    // ---------------- SAVE ----------------
+
+    @RequestMapping("/savePage")
+    public String savePage(Model model) {
+        model.addAttribute("emp", new Employee());
+        return "save";
+    }
+
+    @RequestMapping(value="/save", method=RequestMethod.POST)
+    public String save(@ModelAttribute("emp") Employee emp, Model model) {
+        dao.save(emp);
+        model.addAttribute("msg","Employee Saved Successfully");
+        model.addAttribute("list", dao.getAll());
+        return "success";
+    }
+
+    // ---------------- SEARCH ----------------
+
+    @RequestMapping("/searchPage")
+    public String searchPage() {
+        return "search";
+    }
+
+    @RequestMapping(value="/search", method=RequestMethod.POST)
+    public String search(@RequestParam int id, Model model) {
+        model.addAttribute("emp", dao.getById(id));
+        return "result";
+    }
+
+    // ---------------- DELETE ----------------
+
+    @RequestMapping("/deletePage")
+    public String deletePage() {
+        return "delete";
+    }
+
+    @RequestMapping(value="/delete", method=RequestMethod.POST)
+    public String delete(@RequestParam int id, Model model) {
+        dao.delete(id);
+        model.addAttribute("msg","Employee Deleted Successfully");
+        model.addAttribute("list", dao.getAll());
+        return "success";
+    }
+
+    // ---------------- UPDATE ----------------
+
+    @RequestMapping("/updatePage")
+    public String updatePage() {
+        return "update";
+    }
+
+    @RequestMapping(value="/update", method=RequestMethod.POST)
+    public String update(@ModelAttribute Employee emp, Model model) {
+        dao.update(emp);
+        model.addAttribute("msg","Employee Updated Successfully");
+        model.addAttribute("list", dao.getAll());
+        return "success";
+    }
+}

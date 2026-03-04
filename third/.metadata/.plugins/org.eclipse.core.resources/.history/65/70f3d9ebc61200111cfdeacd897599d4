@@ -1,0 +1,46 @@
+package com.lpu;
+
+import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+
+
+@Controller
+public class StudentController {
+
+    @Autowired
+    private StudentDao studentDao;
+    
+
+    // Form Page
+    @GetMapping("/form")
+    public String showForm() {
+        return "form";
+    }
+
+    // Saving  Student
+    @PostMapping("/save")
+    public String saveStudent(@ModelAttribute Student student) {
+        studentDao.save(student);
+        return "success";   // Goes to success.jsp
+    }
+
+    //Search Page
+    @GetMapping("/search")
+    public String searchPage() {
+        return "search";
+    }
+
+    // Get Student By ID
+    @PostMapping("/getStudent")
+    public String getStudent(@RequestParam("id") int id, Model model) {
+
+        Student student = studentDao.getById(id);
+        model.addAttribute("student", student);
+
+        return "result";
+    }
+}

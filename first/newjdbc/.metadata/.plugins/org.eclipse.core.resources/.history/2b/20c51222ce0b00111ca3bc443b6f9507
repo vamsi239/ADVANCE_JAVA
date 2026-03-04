@@ -1,0 +1,119 @@
+package E_commerce;
+
+import java.util.*;
+import java.util.stream.Collectors;
+ public class Order {
+     private String orderId;
+     private String customerName;
+     private String category;
+     private double amount;
+     private String city;
+     private String status;
+
+     public Order(String orderId, String customerName,
+                  String category, double amount,
+                  String city, String status) {
+         this.orderId = orderId;
+         this.customerName = customerName;
+         this.category = category;
+         this.amount = amount;
+         this.city = city;
+         this.status = status;
+     }
+
+     public String getOrderId() { return orderId; }
+     public String getCustomerName() { return customerName; }
+     public String getCategory() { return category; }
+     public double getAmount() { return amount; }
+     public String getCity() { return city; }
+     public String getStatus() { return status; }
+     
+
+     @Override
+     public String toString() {
+         return orderId + " | " + customerName + " | " +
+                 category + " | " + amount + " | " +
+                 city + " | " + status;
+     }
+
+
+ public static void main(String[] args) {
+
+     List<Order> orders = Arrays.asList(
+             new Order("O1", "Vignan", "Electronics", 75000, "Hyderabad", "PAID"),
+             new Order("O2", "Ravi", "Fashion", 15000, "Chennai", "PAID"),
+             new Order("O3", "Sneha", "Electronics", 50000, "Hyderabad", "CANCELLED"),
+             new Order("O4", "Amit", "Groceries", 5000, "Mumbai", "PAID"),
+             new Order("O5", "Ravi", "Electronics", 120000, "Delhi", "PAID"),
+             new Order("O6", "Kiran", "Fashion", 55000, "Chennai", "PENDING"),
+             new Order("O7", "Vignan", "Groceries", 8000, "Mumbai", "PAID"),
+             new Order("O8", "Sneha", "Fashion", 75000, "Delhi", "PAID")
+     );
+     
+     System.out.println("-----Paid Orders----");
+     orders.stream()
+     .filter(o ->o.getStatus().equals("PAID"))
+     .forEach(System.out::println);
+     
+     long count =orders.stream()
+     .count();
+     System.out.println("Num of oredrs:"+count);
+     
+      double sum = orders.stream()
+    		  .mapToDouble(Order::getAmount)
+    		  .sum();
+      System.out.println("Toatal revenue: "+sum);
+      
+      double high = orders.stream()
+    		        .mapToDouble(Order::getAmount)
+    		        .boxed()
+    		        .sorted(Comparator.reverseOrder())
+    		        .findFirst()
+    		        .orElse(0.0);
+      System.out.println("Highest : "+high);
+      
+      double lowpaid = orders.stream()
+    		           .filter(o->o.getStatus().equals("PAID"))
+    		           .mapToDouble(Order::getAmount)
+       		           .boxed()
+       		           .sorted()
+       		           .findFirst()
+       		           .orElse(0.0);
+      
+      System.out.println("Lowpaid: "+lowpaid);
+      
+      // customer Insights
+      List<String> names = orders.stream()
+    		               .map(Order::getCustomerName)
+    		               .distinct()
+    		               .collect(Collectors.toList());
+      System.out.println("Names : "+names);
+      
+      orders.stream()
+      .filter(o->o.getAmount()>50000)
+      .forEach(System.out::println);
+      
+    		               
+      
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+ }
+ }

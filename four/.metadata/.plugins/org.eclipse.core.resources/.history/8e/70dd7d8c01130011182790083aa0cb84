@@ -1,0 +1,82 @@
+ package com.lpu.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import com.lpu.Entity.Employee;
+import com.lpu.dao.Employeedao;
+
+import jakarta.transaction.TransactionScoped;
+
+@Controller
+@RequestMapping("/employee")
+@TransactionScoped
+public class EmployeeController {
+
+    @Autowired
+    private Employeedao dao;
+
+    @RequestMapping("/home")
+    public String home(Model model) {
+        List<Employee> list = dao.getAll();
+        model.addAttribute("list", list);
+        return "displayall";
+    }
+
+    @RequestMapping("/savePage")
+    public String savePage(Model model) {
+        model.addAttribute("emp", new Employee());
+        return "save";
+    }
+
+    @RequestMapping(value="/save", method=RequestMethod.POST)
+    public String save(@ModelAttribute("emp") Employee e, Model model) {
+        dao.save(e);
+        model.addAttribute("msg", "Employee Saved Successfully");
+        model.addAttribute("list", dao.getAll());
+        return "success";
+    }
+
+    @RequestMapping("/searchPage")
+    public String searchPage() {
+        return "search";
+    }
+
+    @RequestMapping("/search")
+    public String search(@RequestParam("id") int id, Model model) {
+        Employee e = dao.getById(id);
+        model.addAttribute("emp", e);
+        return "success";
+    }
+
+    @RequestMapping("/deletePage")
+    public String deletePage() {
+        return "delete";
+    }
+
+    @RequestMapping("/delete")
+    public String delete(@RequestParam("id") int id, Model model) {
+        dao.delete(id);
+        model.addAttribute("msg", "Employee Deleted Successfully");
+        model.addAttribute("list", dao.getAll());
+        return "success";
+    }
+
+    @RequestMapping("/updatePage")
+    public String updatePage() {
+        return "update";
+    }
+
+    @RequestMapping(value="/update", method=RequestMethod.POST)
+    public String update(@ModelAttribute("emp") Employee e, Model model) {
+        dao.update(e);
+        model.addAttribute("msg", "Employee Updated Successfully");
+        model.addAttribute("list", dao.getAll());
+        return "success";
+    }
+}

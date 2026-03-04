@@ -1,0 +1,9 @@
+package com.lpu.employeeapp.Controller;
+
+
+@RestController
+public class CompanyController {
+	@Autowired
+	private CompanyService companyService;
+	@PostMapping()
+}

@@ -1,0 +1,21 @@
+package javastreams;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+
+public class longeststring {
+	public static void main(String[] args) {
+		List<String> names = Arrays.asList("Ravi","Ragu","Vignan","savan","Ranjan","Madav");
+		
+		String s = names.stream()
+				.sorted((str1,str2) ->Comparator.comparing(str1,str2))
+				.findFirst()
+				.orElse("null");
+		System.out.println(s);
+				
+		
+		
+	}
+
+}

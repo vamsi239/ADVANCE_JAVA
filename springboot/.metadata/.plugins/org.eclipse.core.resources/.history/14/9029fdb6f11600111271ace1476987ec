@@ -1,0 +1,5 @@
+package com.lpu.mobileapp.Exception;
+
+public class GlobalExceptionHandler {
+
+}

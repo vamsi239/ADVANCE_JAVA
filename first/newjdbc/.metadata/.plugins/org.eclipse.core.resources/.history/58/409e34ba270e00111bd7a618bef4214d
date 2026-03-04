@@ -1,0 +1,97 @@
+package m1practice;
+
+import java.util.*;
+
+class LibraryManager {
+
+    // memberId → [outstanding, totalImposed, totalPaid]
+    private Map<String, long[]> memberMap = new HashMap<>();
+
+    // ADD <memberId>
+    public void addMember(String memberId) {
+        if (!memberMap.containsKey(memberId)) {
+            memberMap.put(memberId, new long[]{0, 0, 0});
+        }
+    }
+
+    // IMPOSE <memberId> <amount>
+    public void imposeFine(String memberId, long amount) {
+        if (memberMap.containsKey(memberId)) {
+            long[] data = memberMap.get(memberId);
+            data[0] += amount;   // outstanding
+            data[1] += amount;   // total imposed
+        }
+    }
+
+    // PAY <memberId> <amount>
+    public void payFine(String memberId, long amount) {
+        if (memberMap.containsKey(memberId)) {
+            long[] data = memberMap.get(memberId);
+
+            long payable = Math.min(amount, data[0]);
+            data[0] -= payable;   // reduce outstanding
+            data[2] += payable;   // increase total paid
+        }
+    }
+
+    // DETAILS <memberId>
+    public void getDetails(String memberId) {
+        if (!memberMap.containsKey(memberId)) {
+            System.out.println("Member Not Found");
+            return;
+        }
+
+        long[] data = memberMap.get(memberId);
+
+        System.out.println(memberId + " " 
+                + data[0] + " " 
+                + data[1] + " " 
+                + data[2]);
+    }
+
+    // Process commands
+    public void processCommands(Scanner sc, int N) {
+
+        for (int i = 0; i < N; i++) {
+
+            String line = sc.nextLine();
+            String[] parts = line.split(" ");
+
+            String command = parts[0];
+
+            switch (command) {
+
+                case "ADD":
+                    addMember(parts[1]);
+                    break;
+
+                case "IMPOSE":
+                    imposeFine(parts[1], Long.parseLong(parts[2]));
+                    break;
+
+                case "PAY":
+                    payFine(parts[1], Long.parseLong(parts[2]));
+                    break;
+
+                case "DETAILS":
+                    getDetails(parts[1]);
+                    break;
+            }
+        }
+    }
+}
+
+public class Librarymanger {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int N = Integer.parseInt(sc.nextLine());
+
+        LibraryManager manager = new LibraryManager();
+        manager.processCommands(sc, N);
+
+        sc.close();
+    }
+}

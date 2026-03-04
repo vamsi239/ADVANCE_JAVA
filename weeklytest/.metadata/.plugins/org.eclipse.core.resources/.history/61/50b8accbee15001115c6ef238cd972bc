@@ -1,0 +1,5 @@
+package com.lpu.spring.Entity;
+
+public class Employee {
+
+}

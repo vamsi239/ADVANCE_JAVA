@@ -1,0 +1,5 @@
+package com.lpu.boot1.repository;
+
+public interface CollegeRepo {
+
+}

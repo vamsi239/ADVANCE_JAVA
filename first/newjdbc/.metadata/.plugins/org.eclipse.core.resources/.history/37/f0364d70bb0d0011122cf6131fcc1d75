@@ -1,0 +1,159 @@
+package M1Question19feb;
+
+import java.util.*;
+
+class ExamManager {
+
+    private Map<String, LinkedHashMap<String, Integer>> map = new LinkedHashMap<>();
+    private Map<String, LinkedHashSet<String>> order = new HashMap<>();
+    private StringBuilder out = new StringBuilder();
+
+    public int addRecord(String id, String sub, int marks) {
+
+        map.putIfAbsent(id, new LinkedHashMap<>());
+        order.putIfAbsent(sub, new LinkedHashSet<>());
+        order.get(sub).add(id);
+
+        LinkedHashMap<String, Integer> smap = map.get(id);
+
+        if (!smap.containsKey(sub) || marks > smap.get(sub)) {
+            smap.put(sub, marks);
+            return 1;
+        }
+        return 0;
+    }
+
+    public int removeRecord(String id, String sub) {
+
+        if (!map.containsKey(id)) return 0;
+
+        LinkedHashMap<String, Integer> smap = map.get(id);
+        if (!smap.containsKey(sub)) return 0;
+
+        smap.remove(sub);
+
+        // Remove student from subject order set
+        if (order.containsKey(sub)) {
+            order.get(sub).remove(id);
+            if (order.get(sub).isEmpty()) {
+                order.remove(sub);
+            }
+        }
+
+        // If student has no subjects left, remove student
+        if (smap.isEmpty()) {
+            map.remove(id);
+        }
+
+        return 1;
+    }
+
+    public String getTopScorer(String sub) {
+
+        Set<String> students = order.get(sub);
+        if (students == null || students.isEmpty()) return "No Records";
+
+        int max = -1;
+        List<String> winners = new ArrayList<>();
+
+        for (String id : students) {
+
+            if (!map.containsKey(id)) continue;
+            if (!map.get(id).containsKey(sub)) continue;
+
+            int marks = map.get(id).get(sub);
+
+            if (marks > max) {
+                max = marks;
+                winners.clear();
+                winners.add(id);
+            } else if (marks == max) {
+                winners.add(id);
+            }
+        }
+
+        if (max == -1) return "No Records";
+
+        StringBuilder ans = new StringBuilder();
+        for (String id : winners) {
+            ans.append(id).append(" ").append(max).append("\n");
+        }
+
+        return ans.toString().trim();
+    }
+
+    public String getResult() {
+
+        if (map.isEmpty()) return "No Students";
+
+        StringBuilder ans = new StringBuilder();
+
+        for (String id : map.keySet()) {
+
+            int sum = 0;
+            int count = 0;
+
+            for (int marks : map.get(id).values()) {
+                sum += marks;
+                count++;
+            }
+
+            double avg = (double) sum / count;
+            ans.append(id)
+               .append(" ")
+               .append(String.format("%.2f", avg))
+               .append("\n");
+        }
+
+        return ans.toString().trim();
+    }
+
+    public int processCommands(Scanner sc, int N) {
+
+        for (int i = 0; i < N; i++) {
+
+            String line = sc.nextLine().trim();
+            if (line.isEmpty()) continue;
+
+            String[] p = line.split("\\s+");
+
+            switch (p[0]) {
+                case "ADD":
+                    addRecord(p[1], p[2], Integer.parseInt(p[3]));
+                    break;
+
+                case "REMOVE":
+                    removeRecord(p[1], p[2]);
+                    break;
+
+                case "TOP":
+                    out.append(getTopScorer(p[1])).append("\n");
+                    break;
+
+                case "RESULT":
+                    out.append(getResult()).append("\n");
+                    break;
+            }
+        }
+
+        return 1;
+    }
+
+    public String getOutput() {
+        return out.toString().trim();
+    }
+}
+
+public class examSys {
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+        int N = Integer.parseInt(sc.nextLine().trim());
+
+        ExamManager em = new ExamManager();
+        em.processCommands(sc, N);
+
+        System.out.print(em.getOutput());
+        sc.close();
+    }
+}

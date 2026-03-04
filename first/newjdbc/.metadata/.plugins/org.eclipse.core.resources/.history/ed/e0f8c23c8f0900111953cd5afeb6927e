@@ -1,0 +1,49 @@
+
+	package com.lpu.service;
+
+	import com.lpu.dao.Coursedao;
+	import com.lpu.entity.Course;
+
+	public class CourseService {
+
+	    private Coursedao dao = new Coursedao();
+
+	    // Register new course
+	    public Course addCourse(String cname, String trainer) {
+
+	        if (cname == null || cname.isBlank()) {
+	            throw new IllegalArgumentException("Course name cannot be empty");
+	        }
+
+	        if (trainer == null || trainer.isBlank()) {
+	            throw new IllegalArgumentException("Trainer name cannot be empty");
+	        }
+
+	        Course c = new Course(cname, trainer);
+	        return dao.saveCourse(c);
+	    }
+
+	    // Get course by ID
+	    public Course getCourse(int id) {
+
+	        Course c = dao.findCourseByid(id);
+
+	        if (c == null) {
+	            throw new IllegalArgumentException("Course not found");
+	        }
+
+	        return c;
+	    }
+
+	    // Update trainer name
+	    public void updateTrainer(int id, String trainerName) {
+
+	        if (trainerName == null || trainerName.isBlank()) {
+	            throw new IllegalArgumentException("Trainer name cannot be empty");
+	        }
+
+	        dao.updateTrainer(id, trainerName);
+	    }
+	}
+
+s

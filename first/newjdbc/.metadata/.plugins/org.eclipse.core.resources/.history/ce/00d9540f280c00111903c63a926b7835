@@ -1,0 +1,97 @@
+package m1sample;
+
+import java.util.*;
+
+//Enum representing actions
+enum ActionEnum {
+ LOGIN,
+ LOGOUT,
+ CLICK,
+ PURCHASE
+}
+
+//Interface for Analytics Store
+interface IAnalyticsStore {
+ void storeActions(Queue<ActionEnum> q);
+}
+
+//Concrete implementation of Analytics Store
+class AnalyticsStore implements IAnalyticsStore {
+
+ @Override
+ public void storeActions(Queue<ActionEnum> q) {
+     System.out.println("Sending batch to Analytics Store: " + q);
+ }
+}
+
+//Analytics class
+class Analytics {
+
+ private IAnalyticsStore analyticsStore;
+ private int K;
+ private Queue<ActionEnum> actionQueue;
+ private int totalLoggedActions;
+
+ // Constructor
+ public Analytics(IAnalyticsStore analyticsStore, int K) {
+     if (K <= 0) {
+         throw new IllegalArgumentException("K must be greater than 0");
+     }
+
+     this.analyticsStore = analyticsStore;
+     this.K = K;
+     this.actionQueue = new LinkedList<>();
+     this.totalLoggedActions = 0;
+ }
+
+ // Register action
+ public void RegisterAction(ActionEnum action) {
+
+     actionQueue.offer(action);   // store action in queue
+     totalLoggedActions++;        // increment total count
+
+     // If batch size reached
+     if (actionQueue.size() == K) {
+
+         // Send copy of queue
+         analyticsStore.storeActions(new LinkedList<>(actionQueue));
+
+         // Clear queue after sending
+         actionQueue.clear();
+     }
+ }
+
+ // Return unsent actions count
+ public int getNumberOfActionRegisteredButNotSenttoAnalyticsStore() {
+     return actionQueue.size();
+ }
+
+ // Return total logged actions
+ public int getTotalNumberofLoggedActions() {
+     return totalLoggedActions;
+ }
+}
+
+//Main class
+public class Main {
+
+ public static void main(String[] args) {
+
+     IAnalyticsStore store = new AnalyticsStore();
+
+     // K = 3 (batch size)
+     Analytics analytics = new Analytics(store, 3);
+
+     analytics.RegisterAction(ActionEnum.LOGIN);
+     analytics.RegisterAction(ActionEnum.CLICK);
+     analytics.RegisterAction(ActionEnum.PURCHASE);
+
+     analytics.RegisterAction(ActionEnum.LOGOUT);
+
+     System.out.println("Unsent Actions: "
+             + analytics.getNumberOfActionRegisteredButNotSenttoAnalyticsStore());
+
+     System.out.println("Total Logged Actions: "
+             + analytics.getTotalNumberofLoggedActions());
+ }
+}

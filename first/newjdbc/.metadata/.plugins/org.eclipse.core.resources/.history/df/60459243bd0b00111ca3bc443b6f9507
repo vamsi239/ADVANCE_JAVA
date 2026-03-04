@@ -1,0 +1,14 @@
+package javastreams;
+
+import java.util.Arrays;
+import java.util.List;
+
+public class stringconc {
+	public static void main(String[] args) {
+		List<String> names = Arrays.asList("Ravi","Ragu","Vignan","savan","Ranjan","Madav");
+		
+		String name = names.stream()
+				      .reduce("",(str1,str2)->str1+" "+str2);
+	}
+
+}

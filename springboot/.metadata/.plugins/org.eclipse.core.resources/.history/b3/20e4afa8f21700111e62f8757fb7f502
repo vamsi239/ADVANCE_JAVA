@@ -1,0 +1,85 @@
+package com.lpu.mobileapp.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
+
+import com.lpu.mobileapp.DTO.MobileDTO;
+import com.lpu.mobileapp.Entity.Mobile;
+import com.lpu.mobileapp.Repository.MobileRepository;
+
+@Service
+public class MobileServiceImpl implements MobileService {
+
+    private final MobileRepository mobileRepository;
+
+    public MobileServiceImpl(MobileRepository mobileRepository) {
+        this.mobileRepository = mobileRepository;
+    }
+
+    @Override
+    public MobileDTO saveMobile(MobileDTO mobileDTO) {
+
+        Mobile mobile = new Mobile();
+        BeanUtils.copyProperties(mobileDTO, mobile);
+
+        Mobile savedMobile = mobileRepository.save(mobile);
+
+        MobileDTO responseDTO = new MobileDTO();
+        BeanUtils.copyProperties(savedMobile, responseDTO);
+
+        return responseDTO;
+    }
+
+    @Override
+    public List<MobileDTO> getAllMobiles() {
+
+        return mobileRepository.findAll()
+                .stream()
+                .map(mobile -> {
+                    MobileDTO dto = new MobileDTO();
+                    BeanUtils.copyProperties(mobile, dto);
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public MobileDTO getMobileById(int id) {
+
+        Mobile mobile = mobileRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Mobile not found"));
+
+        MobileDTO dto = new MobileDTO();
+        BeanUtils.copyProperties(mobile, dto);
+
+        return dto;
+    }
+
+    @Override
+    public MobileDTO updateMobile(int id, MobileDTO mobileDTO) {
+
+        Mobile existingMobile = mobileRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Mobile not found"));
+
+        BeanUtils.copyProperties(mobileDTO, existingMobile);
+
+        Mobile updatedMobile = mobileRepository.save(existingMobile);
+
+        MobileDTO responseDTO = new MobileDTO();
+        BeanUtils.copyProperties(updatedMobile, responseDTO);
+
+        return responseDTO;
+    }
+
+    @Override
+    public void deleteMobile(int id) {
+
+        Mobile mobile = mobileRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Mobile not found"));
+
+        mobileRepository.delete(mobile);
+    }
+}

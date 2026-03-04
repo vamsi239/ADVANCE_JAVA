@@ -1,0 +1,34 @@
+package com.lpu.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class MyController {
+
+    // Landing page
+    @RequestMapping("/")
+    public String index() {
+        return "redirect:/employee/home";
+    }
+
+    @RequestMapping("/savePage")
+    public String savePage() {
+        return "save";
+    }
+
+    @RequestMapping("/searchPage")
+    public String searchPage() {
+        return "search";
+    }
+
+    @RequestMapping("/updatePage")
+    public String updatePage() {
+        return "update";
+    }
+
+    @RequestMapping("/deletePage")
+    public String deletePage() {
+        return "delete";
+    }
+}

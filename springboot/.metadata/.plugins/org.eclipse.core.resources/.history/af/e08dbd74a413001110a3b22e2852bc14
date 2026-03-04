@@ -1,0 +1,15 @@
+package com.lpu.boot1.controller;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class MyController {
+	
+	@GetMapping(/hi)
+	public String reqhi() {
+		return "byeee";
+		}
+
+}

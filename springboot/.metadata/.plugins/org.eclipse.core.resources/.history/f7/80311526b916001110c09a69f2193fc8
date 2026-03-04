@@ -1,0 +1,5 @@
+package com.lpu.employeeapp.CompanyDTO;
+
+public class CompanyDTO {
+
+}

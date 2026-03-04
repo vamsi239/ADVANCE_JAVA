@@ -1,0 +1,24 @@
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib uri="jakarta.tags.core" prefix="c" %>
+
+<html>
+<body>
+
+<h2>Update Employee</h2>
+
+<form action="update" method="post">
+
+    Enter ID: <input type="text" name="id"/><br><br>
+    Name: <input type="text" name="name"/><br><br>
+    Phone: <input type="text" name="phone"/><br><br>
+    Email: <input type="text" name="email"/><br><br>
+
+    <input type="submit" value="Update"/>
+
+</form>
+
+<br>
+<a href="home">Back</a>
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+package com.lpu.vehicle;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import com.lpu.one.MyConfig;
+
+public class Driver {
+	public static void main(String[] args) {
+		ApplicationContext context = new AnnotationConfigApplicationContext(MyConfig.class);
+		
+		Person p = context.getBean("person",Person.class);
+		Vehicle v1 = p.getV();
+		v1.start();
+	}
+
+}

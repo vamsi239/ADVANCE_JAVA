@@ -1,0 +1,22 @@
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+
+<html>
+<body>
+
+<h2>Add Employee</h2>
+
+<form:form action="save" method="post" modelAttribute="emp">
+
+    Name: <form:input path="name"/><br><br>
+    Phone: <form:input path="phone"/><br><br>
+    Email: <form:input path="email"/><br><br>
+
+    <input type="submit" value="Save"/>
+
+</form:form>
+
+<br>
+<a href="home">Back</a>
+
+</body>
+</html>

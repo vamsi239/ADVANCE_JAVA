@@ -1,0 +1,5 @@
+package com.lpu.boot1.entity;
+
+public class Student {
+
+}

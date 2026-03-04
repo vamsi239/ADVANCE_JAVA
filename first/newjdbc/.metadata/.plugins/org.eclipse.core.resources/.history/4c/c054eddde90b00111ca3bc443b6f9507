@@ -1,0 +1,31 @@
+package E_commerce;
+
+import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class m1kolkata {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		
+		int n = sc.nextInt();
+		sc.nextLine();
+		
+		List<List<String>> logs = new ArrayList<>();
+		
+		for(int i=0;i<=n;i++) {
+			String s = sc.nextLine();
+			
+			String[] parts = s.split(" ");
+			
+			
+			logs.add(Arrays.asList(parts[0],parts[1],parts[2],parts[3]));
+		}
+		
+		
+		
+	}
+		
+	}
+		 

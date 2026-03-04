@@ -1,0 +1,34 @@
+package com.lpu.boot1.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.lpu.boot1.entity.Student;
+import com.lpu.boot1.repository.StudentRepo;
+
+public class StudentService {
+
+	@Autowired
+	private StudentRepo repo;
+	
+	
+	
+	public Student saveStu(Student student) {
+		return repo.save(student);
+	}
+	
+	
+	
+	public Student findStu(int id) {
+		return repo.findById(id).orElse(null);
+	}
+	
+	public void deleteStu(int id) {
+		repo.deleteById(id);
+	}
+	
+	
+	public List<Student> findAllStu(Student student){
+		return repo.findAll();
+	}
+	
+}

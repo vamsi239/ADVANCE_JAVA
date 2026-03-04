@@ -1,0 +1,8 @@
+INDEX VERSION 1.4+/Users/vignanbaratam/eclipse-workspace/four/.metadata/.plugins/org.eclipse.wst.jsdt.core/indexes
+1784547.index
+1134510761.index
+2451482056.index
+374209848.index
+4132273939.index
+2488553487.index
+1928502929.index
